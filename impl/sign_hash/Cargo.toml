@@ -1,0 +1,8 @@
+[package]
+name = "sign_hash"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rsa = { path = "../rsa" }
+num-bigint = { workspace = true }
