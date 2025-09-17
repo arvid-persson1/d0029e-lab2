@@ -1,1 +1,7 @@
 *.pdf
+impl/verify_cert/cert
+impl/verify_cert/*.pem
+impl/verify_cert/modulo
+impl/verify_cert/public_key
+impl/verify_cert/signature
+impl/verify_cert/body_hash
