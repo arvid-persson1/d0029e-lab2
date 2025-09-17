@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["rsa", "generate", "decrypt", "encrypt", "sign", "verify", "sign_hash", "verify_hash"]
+members = ["rsa", "generate", "decrypt", "encrypt", "sign", "verify", "sign_hash", "verify_hash", "verify_cert", "coll"]
 
 [workspace.dependencies]
 num-bigint = "0.4.6"

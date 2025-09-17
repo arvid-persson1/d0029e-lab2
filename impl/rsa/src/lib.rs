@@ -32,7 +32,7 @@ pub fn generate_key(p: &BigUint, q: &BigUint, e: BigUint) -> Result<KeySet, Keyg
     let phi = (p - 1u8) * (q - 1u8);
 
     if e > BigUint::one() && e < phi {
-        let d = e.modinv(&n).ok_or(KeygenError::InvalidExponent)?;
+        let d = e.modinv(&phi).ok_or(KeygenError::InvalidExponent)?;
         Ok(KeySet { e, d, n })
     } else {
         Err(KeygenError::ExponentOutOfRange)
