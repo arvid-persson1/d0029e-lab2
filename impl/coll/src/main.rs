@@ -1,20 +1,11 @@
 use std::{
     fs::{File, read, write},
-    io::{Read, Seek, SeekFrom},
+    io::{Read, Write, Seek, SeekFrom},
     path::Path,
     process::{Command, Stdio},
 };
 
 const BLOCK_SIZE: usize = 128;
-
-fn run(cmd: &str, args: &[&str]) {
-    let status = Command::new(cmd)
-        .args(args)
-        .stdout(Stdio::null())
-        .status()
-        .unwrap();
-    assert!(status.success());
-}
 
 fn find(haystack: &[u8], needle: &[u8]) -> usize {
     haystack
@@ -34,8 +25,14 @@ fn read_from(path: impl AsRef<Path>, start: u64) -> Vec<u8> {
 }
 
 fn main() {
-    run("python", &["-m", "py_compile", "source.py"]);
-    let mut pyc = read("__pycache__/source.cpython-313.pyc").unwrap();
+    let mut pyc = {
+        let status = Command::new("python")
+            .args(&["-m", "py_compile", "source.py"])
+            .status()
+            .unwrap();
+        assert!(status.success());
+        read("__pycache__/source.cpython-313.pyc").unwrap()
+    };
 
     let len_str = BLOCK_SIZE * 2 - 1;
     let start_x = find(&pyc, &vec![b'x'; len_str]);
@@ -47,15 +44,31 @@ fn main() {
     pyc[start_y..offset].fill(b'x');
     pyc[offset + BLOCK_SIZE..start_y + len_str].fill(b'x');
 
-    write("prefix", &pyc[..prefix_len]).unwrap();
-    run("md5collgen", &["-p", "prefix", "-o", "p", "q"]);
+    {
+        let mut child = Command::new("/home/arvid/md5collgen/md5collgen")
+            .args(&["-p", "/dev/stdin", "-o", "p", "q"])
+            .stdin(Stdio::piped())
+            .stdout(Stdio::null())
+            .spawn()
+            .unwrap();
+
+        child
+            .stdin
+            .as_mut()
+            .unwrap()
+            .write_all(&pyc[..prefix_len])
+            .unwrap();
+
+        let status = child.wait().unwrap();
+        assert!(status.success());
+    }
 
     let p = read_from("p", prefix_len as u64);
     let q = read_from("q", prefix_len as u64);
     assert_eq!(p.len(), BLOCK_SIZE);
     assert_eq!(q.len(), BLOCK_SIZE);
 
-    // Write same bytes to first string, but different bytes to second.
+    // Write same bytes to second string, but different bytes to first.
     pyc[offset..offset + BLOCK_SIZE].copy_from_slice(&p);
     pyc[prefix_len..prefix_len + BLOCK_SIZE].copy_from_slice(&p);
     write("benign.pyc", &pyc).unwrap();
