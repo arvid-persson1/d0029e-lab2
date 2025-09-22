@@ -14,5 +14,5 @@ fn main() {
     let n = parse(N);
 
     let s = sign_md5_hash(M, &d, &n).unwrap();
-    println!("{:X}", s);
+    println!("{:#X}", s);
 }

@@ -15,5 +15,5 @@ fn main() {
     let e = parse(E);
 
     let KeySet { e, d, n } = generate_key(&p, &q, e).unwrap();
-    println!("e: {:X}\nd: {:X}\nn: {:X}", e, d, n);
+    println!("e: {:#X}\nd: {:#X}\nn: {:#X}", e, d, n);
 }

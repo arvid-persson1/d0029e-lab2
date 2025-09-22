@@ -17,5 +17,5 @@ fn main() {
 
     let KeySet { d, n, .. } = generate_key(&p, &q, e).unwrap();
     let s = encrypt(M, &d, &n).unwrap();
-    println!("{:X}", s);
+    println!("{:#X}", s);
 }

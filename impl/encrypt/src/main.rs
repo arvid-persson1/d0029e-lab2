@@ -14,5 +14,5 @@ fn main() {
     let n = parse(N);
 
     let c = encrypt(M, &e, &n).unwrap();
-    println!("{:X}", c);
+    println!("{:#X}", c);
 }
