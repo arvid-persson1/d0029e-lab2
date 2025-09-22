@@ -45,7 +45,7 @@ fn main() {
     pyc[offset + BLOCK_SIZE..start_y + len_str].fill(b'x');
 
     {
-        let mut child = Command::new("/home/arvid/md5collgen/md5collgen")
+        let mut child = Command::new("md5collgen")
             .args(&["-p", "/dev/stdin", "-o", "p", "q"])
             .stdin(Stdio::piped())
             .stdout(Stdio::null())
