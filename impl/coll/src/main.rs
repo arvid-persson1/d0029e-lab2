@@ -1,6 +1,6 @@
 use std::{
     fs::{File, read, write},
-    io::{Read, Write, Seek, SeekFrom},
+    io::{Read, Seek, SeekFrom, Write},
     path::Path,
     process::{Command, Stdio},
 };

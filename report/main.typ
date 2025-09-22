@@ -309,4 +309,7 @@ python benign.pyc
 >>> Hello, World!
 python malicious.pyc
 >>> Goodbye, World!
+md5sum benign.pyc malicious.pyc
+>>> 9e78a947f452a8448b478bef7c544359  benign.pyc
+>>> 9e78a947f452a8448b478bef7c544359  malicious.pyc
 ```
