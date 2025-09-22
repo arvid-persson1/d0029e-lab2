@@ -48,11 +48,9 @@ pub enum EncryptionError {
 
 pub fn encrypt(m: &[u8], e: &Key, n: &Modulo) -> Result<Ciphertext, EncryptionError> {
     let m = BigUint::from_bytes_be(m);
-    if m < *n {
-        Ok(m.modpow(e, n))
-    } else {
-        Err(EncryptionError::MessageTooLarge)
-    }
+    (m < *n)
+        .then(|| m.modpow(e, n))
+        .ok_or(EncryptionError::MessageTooLarge)
 }
 
 pub fn decrypt(c: &Ciphertext, d: &Key, n: &Modulo) -> Vec<u8> {
