@@ -265,7 +265,7 @@ wc -c *.bin
 >>> 192 64_1.bin
 >>> 192 64_2.bin
 >>> ...
-tail -c +61 64_0.bin | head -4 | hexdump
+tail -c +61 60_1.bin | head -4 | hexdump
 >>> 0000000 0000 0000                              
 >>> ...
 ```
